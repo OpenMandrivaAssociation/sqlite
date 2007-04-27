@@ -1,16 +1,10 @@
-%define name	sqlite
-%define version 2.8.17
-%define release %mkrel 6
-
 %define	major 0
 %define libname	%mklibname %{name} %{major}
 
-%define tcl_version %([ -x /usr/bin/tclsh ] && echo "puts \$tcl_version" | tclsh | tr -d . || echo 85)
-
 Summary:	SQLite is a C library that implements an embeddable SQL database engine
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		sqlite
+Version:	2.8.17
+Release:	%mkrel 7
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -98,8 +92,8 @@ which serves as an example of how to use the SQLite library.
 This package contains command line tools for managing the
 %{libname} library.
 
-
 %prep
+
 %setup -q -n %{name}-%{version}
 %patch0 -p0 -b .lib64
 %patch1 -p1 -b .64bit-fixes
@@ -119,11 +113,6 @@ export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
 
 %make
 make doc
-# tests are not reliable with tcl >= 85
-# sqlite3 has better tests
-%if %{tcl_version} < 85
-make test
-%endif
 
 %install
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -168,5 +157,3 @@ chrpath -d %{buildroot}%{_bindir}/*
 %defattr(-,root,root)
 %{_bindir}/*
 %{_mandir}/man1/*
-
-
