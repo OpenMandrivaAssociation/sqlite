@@ -1,7 +1,7 @@
 %define	major 0
 %define libname	%mklibname %{name} %{major}
 
-Summary:	SQLite is a C library that implements an embeddable SQL database engine
+Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	2.8.17
 Release:	%mkrel 6
@@ -28,7 +28,7 @@ distribution comes with a standalone command-line access program
 which serves as an example of how to use the SQLite library.
 
 %package -n	%{libname}
-Summary:	SQLite is a C library that implements an embeddable SQL database engine
+Summary:	C library that implements an embeddable SQL database engine
 Group:          System/Libraries
 
 %description -n	%{libname}
