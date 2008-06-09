@@ -128,9 +128,13 @@ install -m644 sqlite.1 %{buildroot}%{_mandir}/man1/
 
 chrpath -d %{buildroot}%{_bindir}/*
 
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
+%endif
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
