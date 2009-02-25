@@ -13,6 +13,7 @@ Patch0:		sqlite-2.8.14-lib64.patch
 Patch1:		sqlite-64bit-fixes.patch
 Patch2:		sqlite-2.8.15-arch-double-differences.patch
 Patch3:		sqlite-CVE-2007-1887_1888.patch
+Patch4:		sqlite-2.8.17-format_not_a_string_literal_and_no_format_arguments.diff
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -99,6 +100,7 @@ This package contains command line tools for managing the
 %patch1 -p1 -b .64bit-fixes
 %patch2 -p1 -b .double-fixes
 %patch3 -p0 -b .CVE-2007-1887_1888
+%patch4 -p0 -b .format_not_a_string_literal_and_no_format_arguments
 
 %build
 %define __libtoolize true
