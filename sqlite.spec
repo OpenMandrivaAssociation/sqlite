@@ -1,3 +1,4 @@
+%define __libtoolize true
 %define	major 0
 %define libname %mklibname %{name} %{major}
 
@@ -85,9 +86,6 @@ This package contains command line tools for managing the
 %patch4 -p0 -b .format_not_a_string_literal_and_no_format_arguments
 
 %build
-%define __libtoolize true
-%serverbuild
-
 export CFLAGS="${CFLAGS:-%optflags} -DNDEBUG=1"
 export CXXFLAGS="${CXXFLAGS:-%optflags} -DNDEBUG=1"
 export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
