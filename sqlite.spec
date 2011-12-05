@@ -1,10 +1,10 @@
 %define	major 0
-%define libname	%mklibname %{name} %{major}
+%define libname %mklibname %{name} %{major}
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	2.8.17
-Release:	%mkrel 14
+Release:	15
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -18,7 +18,6 @@ BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	tcl tcl-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 SQLite is a C library that implements an embeddable SQL database
@@ -45,7 +44,7 @@ This package contains the shared libraries for %{name}
 %package -n	%{libname}-devel
 Summary:	Development library and header files for the %{name} library
 Group:		Development/C
-Requires:	%{libname} = %{version}-%{release}
+Requires:	%{libname} >= %{version}-%{release}
 Provides:	lib%{name}-devel
 Provides:	%{name}-devel
 
@@ -59,23 +58,6 @@ which serves as an example of how to use the SQLite library.
 
 This package contains the static %{libname} library and its header
 files.
-
-%package -n	%{libname}-static-devel
-Summary:	Static development library for the %{name} library
-Group:		Development/C
-Requires:	%{libname}-devel = %{version}-%{release}
-Provides:	lib%{name}-static-devel = %{version}-%{release}
-Provides:	%{name}-static-devel = %{version}-%{release}
-
-%description -n	%{libname}-static-devel
-SQLite is a C library that implements an embeddable SQL database
-engine. Programs that link with the SQLite library can have SQL
-database access without running a separate RDBMS process. The
-distribution comes with a standalone command-line access program
-(sqlite) that can be used to administer an SQLite database and
-which serves as an example of how to use the SQLite library.
-
-This package contains the static %{libname} library.
 
 %package	tools
 Summary:	Command line tools for managing the %{libname} library
@@ -117,7 +99,7 @@ export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
 make doc
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_includedir}
@@ -130,36 +112,19 @@ install -m644 sqlite.1 %{buildroot}%{_mandir}/man1/
 
 chrpath -d %{buildroot}%{_bindir}/*
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
+# cleanup
+rm -f %{buildroot}%{_libdir}/*.*a
 
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
-
-
-%files -n	%{libname}
-%defattr(-,root,root)
+%files -n %{libname}
 %doc README
-%{_libdir}/lib*.so.*
+%{_libdir}/lib*.so.%{major}*
 
-%files -n	%{libname}-devel
-%defattr(-,root,root)
+%files -n %{libname}-devel
 %doc doc/*.html doc/*.png
 %{_includedir}/*.h
-%{_libdir}/lib*.la
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*.pc
 
-%files -n	%{libname}-static-devel
-%defattr(-,root,root)
-%{_libdir}/lib*.a
-
-%files		tools
-%defattr(-,root,root)
+%files tools
 %{_bindir}/*
 %{_mandir}/man1/*
