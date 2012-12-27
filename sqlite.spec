@@ -2,8 +2,8 @@
 %define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)
 
 %define	major 0
-%define libname %mklibname %{name}_ %{major}
-%define develname %mklibname %{name} -d
+%define libname %mklibname %{name}3_ %{major}
+%define develname %mklibname %{name}3 -d
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
