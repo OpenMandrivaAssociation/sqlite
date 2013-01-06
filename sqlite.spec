@@ -1,9 +1,10 @@
 %define realname sqlite
 %define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)
 
-%define	major 0
-%define libname %mklibname %{name}3_ %{major}
-%define develname %mklibname %{name}3 -d
+%define	api	3
+%define	major	0
+%define libname %mklibname %{name} %{api} %{major}
+%define devname %mklibname %{name} %{api} -d
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
@@ -13,10 +14,9 @@ License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-autoconf-%{realver}.tar.gz
-BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
-Provides:	sqlite3 = %EVRD
-Obsoletes:	sqlite3 < %EVRD
+BuildRequires:	pkgconfig(ncurses)
+%rename	sqlite3
 
 %description
 SQLite is a C library that implements an embeddable SQL database
@@ -40,14 +40,14 @@ which serves as an example of how to use the SQLite library.
 
 This package contains the shared libraries for %{name}
 
-%package -n	%{develname}
+%package -n	%{devname}
 Summary:	Development library and header files for the %{name} library
 Group:		Development/C
 Requires:	%{libname} >= %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%mklibname %{name}_ %{major} -d
 
-%description -n	%{develname}
+%description -n	%{devname}
 SQLite is a C library that implements an embeddable SQL database
 engine. Programs that link with the SQLite library can have SQL
 database access without running a separate RDBMS process. The
@@ -91,21 +91,18 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
 # cleanup
-find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
-
 ln -s sqlite3 %buildroot%_bindir/sqlite
 
 %files -n %{libname}
-%{_libdir}/lib*.so.%{major}*
+%{_libdir}/lib%{name}%{api}.so.%{major}*
 
-%files -n %{develname}
-%attr(0644,root,root) %{_includedir}/*.h
+%files -n %{devname}
+%{_includedir}/*.h
 %{_libdir}/lib*.so
-%attr(0644,root,root) %{_libdir}/pkgconfig/*.pc
+%{_libdir}/pkgconfig/*.pc
 
 %files tools
 %{_bindir}/sqlite*
