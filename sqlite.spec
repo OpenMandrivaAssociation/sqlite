@@ -9,7 +9,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.7.15.1
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -62,6 +62,7 @@ files.
 Summary:	Command line tools for managing the %{libname} library
 Group:		Databases
 Requires:	%{libname} >= %{version}-%{release}
+%rename		sqlite3-tools
 
 %description	tools
 SQLite is a C library that implements an embeddable SQL database
