@@ -46,6 +46,7 @@ Group:		Development/C
 Requires:	%{libname} >= %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%mklibname %{name}_ %{major} -d
+%rename sqlite3-devel
 
 %description -n	%{devname}
 SQLite is a C library that implements an embeddable SQL database
