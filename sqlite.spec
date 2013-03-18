@@ -16,6 +16,7 @@ URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-autoconf-%{realver}.tar.gz
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
+Patch0:		sqlite-aarch64.patch
 %rename	sqlite3
 
 %description
@@ -78,6 +79,7 @@ This package contains command line tools for managing the
 
 %prep
 %setup -qn %{realname}-autoconf-%{realver}
+%patch0 -p1
 
 %build
 export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
