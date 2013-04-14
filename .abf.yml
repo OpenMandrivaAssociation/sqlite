@@ -1,5 +1,2 @@
-removed_sources:
-  sqlite-autoconf-3071502.tar.gz: 075732562183d560cd46a0d8d08b50bc44e34eac
-  sqlite-autoconf-3071601.tar.gz: b0d9b3e2ca3c50f72e5921e9532130787871b7ae
 sources:
   sqlite-autoconf-3071602.tar.gz: 85bf857cf86f34831d55d7ba97606dba581b8d62
