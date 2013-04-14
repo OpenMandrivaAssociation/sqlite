@@ -8,7 +8,7 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.7.16.1
+Version:	3.7.16.2
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
