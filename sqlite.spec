@@ -1,14 +1,14 @@
 %define realname sqlite
 %define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)
 
-%define	api	3
-%define	major	0
+%define api 3
+%define major 0
 %define libname %mklibname %{name} %{api} %{major}
 %define devname %mklibname %{name} %{api} -d
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.7.16.2
+Version:	3.7.17
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
@@ -60,11 +60,11 @@ which serves as an example of how to use the SQLite library.
 This package contains the static %{libname} library and its header
 files.
 
-%package	tools
+%package tools
 Summary:	Command line tools for managing the %{libname} library
 Group:		Databases
 Requires:	%{libname} >= %{version}-%{release}
-%rename		sqlite3-tools
+%rename	sqlite3-tools
 
 %description	tools
 SQLite is a C library that implements an embeddable SQL database
@@ -82,7 +82,7 @@ This package contains command line tools for managing the
 %patch0 -p1
 
 %build
-export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
+export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DEFAULT_MMAP_SIZE=655536 -DSQLITE_DEFAULT_AUTOVACUUM=1"
 
 %configure2_5x \
 	--disable-static \
