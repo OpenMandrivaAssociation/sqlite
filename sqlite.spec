@@ -1,5 +1,5 @@
 %define realname sqlite
-%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)
+%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)0
 
 %define api 3
 %define major 0
