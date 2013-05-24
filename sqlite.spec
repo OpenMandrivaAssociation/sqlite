@@ -89,9 +89,6 @@ export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLI
 	--enable-threadsafe \
 	--enable-dynamic-extensions
 
-# (tpg) sqlite >= 3.7.10 is buggy if malloc_usable_size() is detected, disable it
-sed -i '/HAVE_MALLOC_USABLE_SIZE/d' config.h
-
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
