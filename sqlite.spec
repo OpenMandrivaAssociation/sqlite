@@ -87,8 +87,6 @@ export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLI
 %configure2_5x \
 	--disable-static \
 	--enable-threadsafe \
-    --enable-threads-override-locks \
-    --enable-load-extension \
 	--enable-dynamic-extensions
 
 # (tpg) sqlite >= 3.7.10 is buggy if malloc_usable_size() is detected, disable it
