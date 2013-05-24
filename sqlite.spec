@@ -9,7 +9,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.7.17
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -82,12 +82,18 @@ This package contains command line tools for managing the
 %patch0 -p1
 
 %build
-export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DEFAULT_MMAP_SIZE=655536 -DSQLITE_DEFAULT_AUTOVACUUM=1"
+export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1"
 
 %configure2_5x \
 	--disable-static \
 	--enable-threadsafe \
+    --enable-threads-override-locks \
+    --enable-load-extension \
 	--enable-dynamic-extensions
+
+# (tpg) sqlite >= 3.7.10 is buggy if malloc_usable_size() is detected, disable it
+sed -i '/HAVE_MALLOC_USABLE_SIZE/d' config.h
+
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
