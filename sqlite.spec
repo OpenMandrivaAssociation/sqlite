@@ -1,5 +1,5 @@
 %define realname sqlite
-%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)0
+%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)0%(echo %version |cut -d. -f3)%(echo %version |cut -d. -f4)00
 
 %define api 3
 %define major 0
@@ -8,15 +8,14 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.7.17
-Release:	6
+Version:	3.8.3
+Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
-Source0:	http://www.sqlite.org/2013/%{realname}-autoconf-%{realver}.tar.gz
+Source0:	http://www.sqlite.org/2014/%{realname}-autoconf-%{realver}.tar.gz
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
-Patch0:		sqlite-aarch64.patch
 %rename	sqlite3
 
 %description
@@ -79,7 +78,6 @@ This package contains command line tools for managing the
 
 %prep
 %setup -qn %{realname}-autoconf-%{realver}
-%patch0 -p1
 
 %build
 export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1"
