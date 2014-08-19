@@ -1,5 +1,5 @@
 %define realname sqlite
-%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)0%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)
+%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)0%(echo %version |cut -d. -f3)00%(echo %version |cut -d. -f4)
 
 %define api 3
 %define major 0
@@ -8,8 +8,8 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.8.4.1
-Release:	3
+Version:	3.8.6
+Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
