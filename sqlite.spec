@@ -1,4 +1,5 @@
-%define realname sqlite
+# Mixed automake/non-automake use
+%define _disable_rebuild_configure 1
 %define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)0%(echo %version |cut -d. -f4)
 
 %define api 3
@@ -8,12 +9,12 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.8.10.1
-Release:	2
+Version:	3.8.11.0
+Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
-Source0:	http://www.sqlite.org/2015/%{realname}-autoconf-%{realver}.tar.gz
+Source0:	http://www.sqlite.org/2015/%{name}-autoconf-%{realver}.tar.gz
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 %rename	sqlite3
@@ -77,12 +78,12 @@ This package contains command line tools for managing the
 %{libname} library.
 
 %prep
-%setup -qn %{realname}-autoconf-%{realver}
+%setup -qn %{name}-autoconf-%{realver}
 
 %build
 export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1"
 
-%configure2_5x \
+%configure \
 	--disable-static \
 	--enable-threadsafe \
 	--enable-dynamic-extensions
