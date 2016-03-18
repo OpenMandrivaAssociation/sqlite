@@ -10,7 +10,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.11.1
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -81,7 +81,7 @@ This package contains command line tools for managing the
 %setup -qn %{name}-autoconf-%{realver}
 
 %build
-export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
+export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_FTS3_TOKENIZER -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
 
 %configure \
 	--disable-static \
