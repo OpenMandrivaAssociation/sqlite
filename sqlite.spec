@@ -7,10 +7,13 @@
 %define libname %mklibname %{name} %{api} %{major}
 %define devname %mklibname %{name} %{api} -d
 
+# (tpg) optimize it a bit
+%global optflags %optflags -O3
+
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.15.2
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -98,7 +101,7 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %makeinstall_std
 
 # cleanup
-ln -s sqlite3 %buildroot%_bindir/sqlite
+ln -s sqlite3 %{buildroot}%{_bindir}/sqlite
 
 %files -n %{libname}
 %{_libdir}/lib%{name}%{api}.so.%{major}*
