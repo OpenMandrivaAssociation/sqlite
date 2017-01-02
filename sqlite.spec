@@ -12,12 +12,12 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.15.2
-Release:	2
+Version:	3.16.0
+Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
-Source0:	http://www.sqlite.org/2016/%{name}-autoconf-%{realver}.tar.gz
+Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 %rename	sqlite3
