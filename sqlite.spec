@@ -10,6 +10,10 @@
 # (tpg) optimize it a bit
 %global optflags %optflags -O3
 
+%ifarch %{ix86}
+%define _disable_lto 1
+%endif
+
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.20.1
