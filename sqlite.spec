@@ -16,12 +16,18 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.20.1
+Version:	3.21.0
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
+# (tpg) ClearLinux patches
+Patch1:		flags.patch
+Patch2:		defaults.patch
+Patch3:		walmode.patch
+Patch4:		chunksize.patch
+Patch5:		defaultwal.patch
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 %rename	sqlite3
@@ -86,6 +92,7 @@ This package contains command line tools for managing the
 
 %prep
 %setup -qn %{name}-autoconf-%{realver}
+%apply_patches
 
 %build
 export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_FTS3_TOKENIZER -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
