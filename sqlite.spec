@@ -8,7 +8,7 @@
 %define devname %mklibname %{name} %{api} -d
 
 # (tpg) optimize it a bit
-%global optflags %optflags -O3
+%global optflags %optflags -O3 --rtlib=compiler-rt
 
 %ifarch %{ix86}
 %define _disable_lto 1
@@ -17,7 +17,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.23.1
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -40,11 +40,11 @@ distribution comes with a standalone command-line access program
 (sqlite) that can be used to administer an SQLite database and
 which serves as an example of how to use the SQLite library.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	C library that implements an embeddable SQL database engine
 Group:		System/Libraries
 
-%description -n	%{libname}
+%description -n %{libname}
 SQLite is a C library that implements an embeddable SQL database
 engine. Programs that link with the SQLite library can have SQL
 database access without running a separate RDBMS process. The
@@ -54,15 +54,15 @@ which serves as an example of how to use the SQLite library.
 
 This package contains the shared libraries for %{name}
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Development library and header files for the %{name} library
 Group:		Development/C
-Requires:	%{libname} >= %{version}-%{release}
-Provides:	%{name}-devel = %{version}-%{release}
+Requires:	%{libname} >= %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 Obsoletes:	%mklibname %{name}_ %{major} -d
 %rename sqlite3-devel
 
-%description -n	%{devname}
+%description -n %{devname}
 SQLite is a C library that implements an embeddable SQL database
 engine. Programs that link with the SQLite library can have SQL
 database access without running a separate RDBMS process. The
@@ -76,10 +76,10 @@ files.
 %package tools
 Summary:	Command line tools for managing the %{libname} library
 Group:		Databases
-Requires:	%{libname} >= %{version}-%{release}
+Requires:	%{libname} >= %{EVRD}
 %rename	sqlite3-tools
 
-%description	tools
+%description tools
 SQLite is a C library that implements an embeddable SQL database
 engine. Programs that link with the SQLite library can have SQL
 database access without running a separate RDBMS process. The
