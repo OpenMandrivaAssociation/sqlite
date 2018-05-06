@@ -7,12 +7,12 @@
 %define libname %mklibname %{name} %{api} %{major}
 %define devname %mklibname %{name} %{api} -d
 
-# (tpg) optimize it a bit
-%global optflags %optflags -O3
-
 %ifarch %{ix86} %{arm}
 %define _disable_lto 1
 %endif
+
+# (tpg) optimize it a bit
+%global optflags %{optflags} -O3 --rtlib=compiler-rt
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
@@ -98,10 +98,6 @@ autoreconf -fi
 
 %build
 export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_FTS3_TOKENIZER -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
-
-%ifarch %arm
-export LDFLAGS="${LDFLAGS:-%ldflags} --rtlib=compiler-rt"
-%endif
 
 %configure \
 	--disable-static \
