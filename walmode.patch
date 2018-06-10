@@ -1,7 +1,8 @@
---- sqlite-autoconf-3120000/shell.c~	2016-03-29 10:47:26.000000000 +0000
-+++ sqlite-autoconf-3120000/shell.c	2016-04-10 19:53:45.868640149 +0000
-@@ -2097,6 +2097,7 @@
-       if( keepAlive ) return;
+diff -up sqlite-autoconf-3240000/shell.c.0003~ sqlite-autoconf-3240000/shell.c
+--- sqlite-autoconf-3240000/shell.c.0003~	2018-06-10 00:36:51.360141408 +0200
++++ sqlite-autoconf-3240000/shell.c	2018-06-10 13:02:42.849592756 +0200
+@@ -11127,6 +11127,7 @@ static void open_db(ShellState *p, int o
+       if( openFlags & OPEN_DB_KEEPALIVE ) return;
        exit(1);
      }
 +    sqlite3_exec(p->db, "PRAGMA journal_mode=WAL;", 0, 0, NULL);
