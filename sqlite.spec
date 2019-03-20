@@ -12,7 +12,9 @@
 %endif
 
 # (tpg) optimize it a bit
+%ifnarch riscv64
 %global optflags %{optflags} -O3 --rtlib=compiler-rt
+%endif
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
