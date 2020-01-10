@@ -94,7 +94,7 @@ This package contains command line tools for managing the
 
 %prep
 %setup -qn %{name}-autoconf-%{realver}
-%apply_patches
+%autopatch -p1
 
 autoreconf -fi
 
