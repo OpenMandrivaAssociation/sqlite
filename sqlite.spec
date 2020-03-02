@@ -93,8 +93,7 @@ This package contains command line tools for managing the
 %{libname} library.
 
 %prep
-%setup -qn %{name}-autoconf-%{realver}
-%autopatch -p1
+%autosetup -n %{name}-autoconf-%{realver} -p1
 
 autoreconf -fi
 
@@ -110,10 +109,10 @@ export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLI
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
-%make
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 
 # cleanup
 ln -s sqlite3 %{buildroot}%{_bindir}/sqlite
