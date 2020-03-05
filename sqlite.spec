@@ -30,7 +30,7 @@ Patch2:		defaults.patch
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
 Patch5:		defaultwal.patch
-# (tpg)
+# (tpg) do not enable ICU support as it just bloats everything
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(zlib)
