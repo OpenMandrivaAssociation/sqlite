@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.31.1
-Release:	2
+Release:	3
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -30,10 +30,9 @@ Patch2:		defaults.patch
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
 Patch5:		defaultwal.patch
+# (tpg) do not enable ICU support as it just bloats everything
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
-BuildRequires:	pkgconfig(icu-i18n)
-BuildRequires:	pkgconfig(icu-uc)
 BuildRequires:	pkgconfig(zlib)
 %rename	sqlite3
 
@@ -100,15 +99,10 @@ This package contains command line tools for managing the
 autoreconf -fi
 
 %build
-export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_ICU=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_JSON1=1 "
-export LDFLAGS="%{ldflags} -licuuc -licui18n"
+export CPPFLAGS="-DSQLITE_ENABLE_DBSTAT_VTAB=1"
 %configure \
 	--disable-static \
-	--enable-threadsafe \
-	--enable-threads-override-locks \
-	--enable-fts4 \
-	--enable-fts5 \
-	--enable-load-extension
+	--disable-static-shell
 
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
