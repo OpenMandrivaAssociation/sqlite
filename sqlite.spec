@@ -7,12 +7,13 @@
 %define libname %mklibname %{name} %{api} %{major}
 %define devname %mklibname %{name} %{api} -d
 
+%ifarch %{ix86} %{arm}
 %define _disable_lto 1
-
+%endif
 
 # (tpg) optimize it a bit
-%if 0
-#global optflags %{optflags} -O3 --rtlib=compiler-rt
+%ifnarch riscv64
+%global optflags %{optflags} -O3 --rtlib=compiler-rt
 %endif
 
 Summary:	C library that implements an embeddable SQL database engine
@@ -24,19 +25,14 @@ Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 # (tpg) ClearLinux patches
-%if 0
 Patch1:		flags.patch
 Patch2:		defaults.patch
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
 Patch5:		defaultwal.patch
-%endif
+# (tpg)
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
-%if 0
-BuildRequires:	pkgconfig(icu-i18n)
-BuildRequires:	pkgconfig(icu-uc)
-%endif
 BuildRequires:	pkgconfig(zlib)
 %rename	sqlite3
 
@@ -103,18 +99,10 @@ This package contains command line tools for managing the
 autoreconf -fi
 
 %build
-#export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_ICU=0 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_JSON1=1 "
-#export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=0 -DSQLITE_ENABLE_API_ARMOR -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_DBSTAT_VTAB -DSQLITE_ENABLE_HIDDEN_COLUMNS -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_FTS5 -DSQLITE_ENABLE_JSON1 -DSQLITE_ENABLE_RBU -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT -DSQLITE_SOUNDEX -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_SECURE_DELETE"
-export CPPFLAGS="${CPPFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_SECURE_DELETE -DSQLITE_MAX_VARIABLE_NUMBER=250000 -DSQLITE_MAX_EXPR_DEPTH=10000"
+export CPPFLAGS="-DSQLITE_ENABLE_DBSTAT_VTAB=1"
 %configure \
 	--disable-static \
-	--disable-static-shell \
-	--disable-amalgamation \
-	--enable-fts3 \
-	--enable-fts4 \
-	--enable-fts5 \
-	--enable-json1 \
-	--enable-rtree
+	--disable-static-shell
 
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
