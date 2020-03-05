@@ -16,6 +16,7 @@
 %endif
 
 Summary:	C library that implements an embeddable SQL database engine
+Name:		sqlite
 Version:	3.31.1
 Release:	2
 License:	Public Domain
