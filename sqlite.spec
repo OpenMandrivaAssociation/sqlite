@@ -12,7 +12,7 @@
 %endif
 
 # (tpg) optimize it a bit
-%ifnarch riscv64
+%if 0
 %global optflags %{optflags} -O3 --rtlib=compiler-rt
 %endif
 
@@ -25,15 +25,19 @@ Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 # (tpg) ClearLinux patches
+%if 0
 Patch1:		flags.patch
 Patch2:		defaults.patch
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
 Patch5:		defaultwal.patch
+%endif
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
+%if 0
 BuildRequires:	pkgconfig(icu-i18n)
 BuildRequires:	pkgconfig(icu-uc)
+%endif
 BuildRequires:	pkgconfig(zlib)
 %rename	sqlite3
 
@@ -101,7 +105,7 @@ autoreconf -fi
 
 %build
 export CFLAGS="${CFLAGS:-%optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER -DSQLITE_ENABLE_RTREE=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_ICU=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_JSON1=1 "
-export LDFLAGS="%{ldflags} -licuuc -licui18n"
+#export LDFLAGS="%{ldflags} -licuuc -licui18n"
 %configure \
 	--disable-static \
 	--enable-threadsafe \
