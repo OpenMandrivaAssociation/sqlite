@@ -7,7 +7,14 @@
 %define libname %mklibname %{name} %{api} %{major}
 %define devname %mklibname %{name} %{api} -d
 
+%ifarch %{ix86} %{arm}
 %define _disable_lto 1
+%endif
+
+# (tpg) optimize it a bit
+%ifnarch riscv64
+%global optflags %{optflags} -O3 --rtlib=compiler-rt
+%endif
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
@@ -18,13 +25,10 @@ Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 # (tpg) ClearLinux patches
-%if 0
-Patch1:		flags.patch
 Patch2:		defaults.patch
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
 Patch5:		defaultwal.patch
-%endif
 # (tpg) do not enable ICU support as it just bloats everything
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
@@ -94,9 +98,12 @@ This package contains command line tools for managing the
 autoreconf -fi
 
 %build
+# BIG FAT WARNING !!!
+# DO NOT FIDDLE WITH COMPILE-TIME OPTIONS AS YOU MAY BREAK THINGS BADLY !!!
 # (tpg) firefox needs SQLITE_ENABLE_FTS3
 # Qt5 needs SQLITE_ENABLE_COLUMN_METADATA
-export CPPFLAGS="-Wall -fno-strict-aliasing -DNDEBUG=0 -DSQLITE_THREADSAFE=0 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_DEBUG -DSQLITE_ENABLE_EXPLAIN_COMMENTS -DSQLITE_ENABLE_SELECTTRACE -DSQLITE_ENABLE_WHERETRACE"
+# 2020-03-06 without -DSQLITE_THREADSAFE=0 things like plasmashell and akonadi crashes
+export CPPFLAGS="-Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_THREADSAFE=0 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_MAX_WORKER_THREADS=16 -DSQLITE_DEFAULT_WORKER_THREADS=4 -DSQLITE_DEFAULT_PAGE_SIZE=4096 -DSQLITE_TEMP_STORE=2 -DSQLITE_MAX_DEFAULT_PAGE_SIZE=32768 -DSQLITE_DEFAULT_SYNCHRONOUS=1 -DSQLITE_DEFAULT_MMAP_SIZE=67108864"
 
 %configure \
 	--disable-static \
