@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.31.1
-Release:	3
+Release:	4
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -99,7 +99,7 @@ This package contains command line tools for managing the
 autoreconf -fi
 
 %build
-export CPPFLAGS="-DSQLITE_ENABLE_DBSTAT_VTAB=1"
+export CPPFLAGS="-DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
 %configure \
 	--disable-static \
 	--disable-static-shell
