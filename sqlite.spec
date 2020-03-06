@@ -100,7 +100,10 @@ export CPPFLAGS="-DNDEBUG=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_F
 
 %configure \
 	--disable-static \
-	--disable-static-shell
+	--disable-static-shell \
+	--enable-fts5 \
+	--enable-json1 \
+	--enable-threadsafe
 
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
