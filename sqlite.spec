@@ -25,7 +25,6 @@ Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 # (tpg) ClearLinux patches
-Patch2:		defaults.patch
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
 Patch5:		defaultwal.patch
