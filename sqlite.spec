@@ -13,20 +13,19 @@
 
 # (tpg) optimize it a bit
 %ifnarch riscv64
-%global optflags %{optflags} -O3 --rtlib=compiler-rt
+%global optflags %{optflags} -O3
 %endif
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.31.1
-Release:	4
+Release:	5
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 # (tpg) ClearLinux patches
-Patch1:		flags.patch
-Patch2:		defaults.patch
+Patch2:		,defaults.patch
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
 Patch5:		defaultwal.patch
@@ -99,10 +98,18 @@ This package contains command line tools for managing the
 autoreconf -fi
 
 %build
-export CPPFLAGS="-DNDEBUG=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
+# BIG FAT WARNING !!!
+# DO NOT FIDDLE WITH COMPILE-TIME OPTIONS AS YOU MAY BREAK THINGS BADLY !!!
+# (tpg) firefox needs SQLITE_ENABLE_FTS3
+# Qt5 needs SQLITE_ENABLE_COLUMN_METADATA
+export CPPFLAGS="-Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_MAX_WORKER_THREADS=16 -DSQLITE_DEFAULT_WORKER_THREADS=4 -DSQLITE_DEFAULT_PAGE_SIZE=4096 -DSQLITE_TEMP_STORE=2 -DSQLITE_MAX_DEFAULT_PAGE_SIZE=32768 -DSQLITE_DEFAULT_SYNCHRONOUS=1 -DSQLITE_DEFAULT_MMAP_SIZE=67108864"
+
 %configure \
 	--disable-static \
-	--disable-static-shell
+	--disable-static-shell \
+	--enable-fts5 \
+	--enable-json1 \
+        --enable-threadsafe
 
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
