@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.36.0
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -62,7 +62,7 @@ Group:		Development/C
 Requires:	%{libname} >= %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 Obsoletes:	%mklibname %{name}_ %{major} -d
-%rename sqlite3-devel
+%rename	sqlite3-devel
 
 %description -n %{devname}
 SQLite is a C library that implements an embeddable SQL database
@@ -103,14 +103,27 @@ autoreconf -fi
 # Qt5 needs SQLITE_ENABLE_COLUMN_METADATA
 # For information on some of the flags, see
 # https://www.sqlite.org/compile.html
-export CPPFLAGS="-Wall -fno-strict-aliasing -DNDEBUG=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_RTREE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_MAX_WORKER_THREADS=16 -DSQLITE_DEFAULT_WORKER_THREADS=4 -DSQLITE_DEFAULT_PAGE_SIZE=4096 -DSQLITE_TEMP_STORE=2 -DSQLITE_MAX_DEFAULT_PAGE_SIZE=32768 -DSQLITE_DEFAULT_SYNCHRONOUS=1 -DSQLITE_DEFAULT_MMAP_SIZE=67108864 -DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 -DSQLITE_USE_ALLOCA=1"
+export CFLAGS="%{optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 \
+	-DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_RTREE=1 \
+	-DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 \
+	-DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
+	-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+	-DSQLITE_ENABLE_FTS3=1 -DSQLITE_MAX_WORKER_THREADS=16 -DSQLITE_ENABLE_FTS4=1 \
+	-DSQLITE_DEFAULT_WORKER_THREADS=4 -DSQLITE_DEFAULT_PAGE_SIZE=4096 \
+	-DSQLITE_TEMP_STORE=2 -DSQLITE_MAX_DEFAULT_PAGE_SIZE=32768 \
+	-DSQLITE_DEFAULT_SYNCHRONOUS=1 -DSQLITE_DEFAULT_MMAP_SIZE=67108864 \
+	-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 -DSQLITE_USE_ALLOCA=1 \
+	-DSQLITE_ENABLE_MATH_FUNCTIONS"
 
 %configure \
 	--disable-static \
 	--disable-static-shell \
+	--enable-fts4 \
 	--enable-fts5 \
 	--enable-json1 \
-        --enable-threadsafe
+	--enable-threadsafe \
+	--enable-threads-override-locks \
+	--enable-load-extension
 
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -134,4 +147,4 @@ ln -s sqlite3 %{buildroot}%{_bindir}/sqlite
 
 %files tools
 %{_bindir}/sqlite*
-%{_mandir}/man1/*
+%doc %{_mandir}/man1/*
