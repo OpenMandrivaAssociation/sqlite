@@ -18,12 +18,12 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.37.0
+Version:	3.37.1
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
-Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
+Source0:	http://www.sqlite.org/2021/%{name}-autoconf-%{realver}.tar.gz
 # (tpg) ClearLinux patches
 Patch3:		walmode.patch
 Patch4:		chunksize.patch
