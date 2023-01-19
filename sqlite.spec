@@ -19,15 +19,18 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.40.1
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 # (tpg) ClearLinux patches
-Patch3:		walmode.patch
+# NOTE: NEVER add the ClearLinux patches "walmode.patch" and
+# "defaultwal.patch". While those improve performance, they
+# require additional permissions (write access for any user
+# trying to *read* a file to the directory containing the file!)
+# and therefore cause subtle breakages.
 Patch4:		chunksize.patch
-Patch5:		defaultwal.patch
 # (tpg) do not enable ICU support as it just bloats everything
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
