@@ -18,8 +18,8 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.41.2
-Release:	2
+Version:	3.43.0
+Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -116,7 +116,7 @@ export CFLAGS="%{optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 \
 	-DSQLITE_TEMP_STORE=2 -DSQLITE_MAX_DEFAULT_PAGE_SIZE=32768 \
 	-DSQLITE_DEFAULT_SYNCHRONOUS=1 -DSQLITE_DEFAULT_MMAP_SIZE=67108864 \
 	-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 -DSQLITE_USE_ALLOCA=1 \
-	-DSQLITE_ENABLE_MATH_FUNCTIONS"
+	-DSQLITE_ENABLE_MATH_FUNCTIONS -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_JSON=1"
 
 %configure \
 	--disable-static \
