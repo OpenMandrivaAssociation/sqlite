@@ -18,16 +18,24 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-# WARNING Versions 3.42 and 3.43 are known to break DNF (test case: Update sqlite
-# and "dnf distro-sync". With 3.42/3.43, it results in a segfault for no apparent
-# reason).
-# DON'T update unless you've verified this is fixed!
-Version:	3.41.2
+Version:	3.43.0
 Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
+# Allowing SQLITE_CONFIG_LOG at runtime (introduced between 3.41.2
+# and 3.42.0) causes dnf to crash when trying to install anything.
+# Revert this behavior to fix dnf.
+# Don't remove this patch unless you've verified that the problem
+# has been fixed by other means.
+# This probably affects only systems where the DNF history database
+# uses WAL.
+# Test case: Install sqlite and either
+# dnf --refresh distro-sync
+# or
+# dnf install any-package-not-currently-installed
+Patch0:		sqlite-disallow-SQLITE_CONFIG_LOG-at-runtime.patch
 # (tpg) ClearLinux patches
 # NOTE: NEVER add the ClearLinux patches "walmode.patch" and
 # "defaultwal.patch". While those improve performance, they
