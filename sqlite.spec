@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	2
+Release:	3
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -118,27 +118,53 @@ autoreconf -fi
 # Qt5 needs SQLITE_ENABLE_COLUMN_METADATA
 # For information on some of the flags, see
 # https://www.sqlite.org/compile.html
-export CFLAGS="%{optflags} -Wall -fno-strict-aliasing -DNDEBUG=1 \
-	-DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_ENABLE_RTREE=1 \
-	-DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 \
-	-DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
-	-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
-	-DSQLITE_ENABLE_FTS3=1 -DSQLITE_MAX_WORKER_THREADS=16 -DSQLITE_ENABLE_FTS4=1 \
-	-DSQLITE_DEFAULT_WORKER_THREADS=4 -DSQLITE_DEFAULT_PAGE_SIZE=4096 \
-	-DSQLITE_TEMP_STORE=2 -DSQLITE_MAX_DEFAULT_PAGE_SIZE=32768 \
-	-DSQLITE_DEFAULT_SYNCHRONOUS=1 -DSQLITE_DEFAULT_MMAP_SIZE=67108864 \
-	-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 -DSQLITE_USE_ALLOCA=1 \
-	-DSQLITE_ENABLE_MATH_FUNCTIONS"
+export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
+        -DNDEBUG=1 \
+        -DSQLITE_DEFAULT_CACHE_SIZE=-16000 \
+        -DSQLITE_DEFAULT_FOREIGN_KEYS=1 \
+        -DSQLITE_DEFAULT_MEMSTATUS=0 \
+        -DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 \
+        -DSQLITE_DISABLE_DIRSYNC=1 \
+        -DSQLITE_DQS=0 \
+        -DSQLITE_ENABLE_COLUMN_METADATA \
+        -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+        -DSQLITE_ENABLE_DESERIALIZE \
+        -DSQLITE_ENABLE_FTS3 \
+        -DSQLITE_ENABLE_FTS3_PARENTHESIS \
+        -DSQLITE_ENABLE_FTS4 \
+        -DSQLITE_ENABLE_FTS5 \
+        -DSQLITE_ENABLE_GEOPOLY \
+        -DSQLITE_ENABLE_JSON1 \
+        -DSQLITE_ENABLE_MATH_FUNCTIONS \
+        -DSQLITE_ENABLE_RTREE \
+        -DSQLITE_ENABLE_STAT4 \
+        -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
+        -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT \
+        -DSQLITE_INTROSPECTION_PRAGMAS \
+        -DSQLITE_LIKE_DOESNT_MATCH_BLOBS \
+        -DSQLITE_OMIT_DEPRECATED \
+        -DSQLITE_OMIT_GET_TABLE \
+        -DSQLITE_OMIT_PROGRESS_CALLBACK \
+        -DSQLITE_OMIT_SHARED_CACHE \
+        -DSQLITE_OMIT_TCL_VARIABLE \
+        -DSQLITE_SOUNDEX \
+        -DSQLITE_THREADSAFE=2 \
+        -DSQLITE_TRACE_SIZE_LIMIT=32 \
+        -DSQLITE_USE_ALLOCA=1 \
+        -DSQLITE_USE_URI=0 "
 
 %configure \
-	--disable-static \
-	--disable-static-shell \
-	--enable-fts4 \
-	--enable-fts5 \
-	--enable-json1 \
-	--enable-threadsafe \
-	--enable-threads-override-locks \
-	--enable-load-extension
+        --disable-static \
+        --disable-static-shell \
+        --enable-fts3 \
+        --enable-fts4 \
+        --enable-fts5 \
+        --enable-json1 \
+        --enable-threadsafe \
+        --enable-threads-override-locks \
+        --enable-geopoly \
+        --enable-rtree \
+        --enable-load-extension
 
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
