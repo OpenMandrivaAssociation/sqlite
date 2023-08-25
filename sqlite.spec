@@ -18,6 +18,10 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
+# WARNING Versions 3.42 and 3.43 are known to break DNF (test case: Update sqlite
+# and "dnf distro-sync". With 3.42/3.43, it results in a segfault for no apparent
+# reason).
+# DON'T update unless you've verified this is fixed!
 Version:	3.41.2
 Release:	2
 License:	Public Domain
