@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	4
+Release:	5
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -119,12 +119,15 @@ autoreconf -fi
 # Python needs sqlite3_progress_handler (so we can't use SQLITE_OMIT_PROGRESS_CALLBACK)
 # Upstream python < 3.12 also needs sqlite3_enable_shared_cache 
 # (so we can't use SQLITE_OMIT_SHARED_CACHE), but we can patch that out easily
+# SQLITE_DEFAULT_FOREIGN_KEYS=1  seems to make sense, but breaks removing rpm packages
+# SQLITE_THREADSAFE=2 is faster than SQLITE_THREADSAFE=1, but needs a bit more testing
+# to make sure we don't have anything relying on sharing a database connection between
+# threads.
 # For information on some of the flags, see
 # https://www.sqlite.org/compile.html
 export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DNDEBUG=1 \
 	-DSQLITE_DEFAULT_CACHE_SIZE=-16000 \
-	-DSQLITE_DEFAULT_FOREIGN_KEYS=1 \
 	-DSQLITE_DEFAULT_MEMSTATUS=0 \
 	-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 \
 	-DSQLITE_DISABLE_DIRSYNC=1 \
@@ -150,7 +153,7 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_OMIT_SHARED_CACHE \
 	-DSQLITE_OMIT_TCL_VARIABLE \
 	-DSQLITE_SOUNDEX \
-	-DSQLITE_THREADSAFE=2 \
+	-DSQLITE_THREADSAFE=1 \
 	-DSQLITE_TRACE_SIZE_LIMIT=32 \
 	-DSQLITE_USE_ALLOCA=1 \
 	-DSQLITE_USE_URI=0 "
