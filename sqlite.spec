@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	3
+Release:	4
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -116,55 +116,53 @@ autoreconf -fi
 # DO NOT FIDDLE WITH COMPILE-TIME OPTIONS AS YOU MAY BREAK THINGS BADLY !!!
 # (tpg) firefox needs SQLITE_ENABLE_FTS3
 # Qt5 needs SQLITE_ENABLE_COLUMN_METADATA
+# Python needs sqlite3_progress_handler (so we can't use SQLITE_OMIT_PROGRESS_CALLBACK)
+# Upstream python < 3.12 also needs sqlite3_enable_shared_cache 
+# (so we can't use SQLITE_OMIT_SHARED_CACHE), but we can patch that out easily
 # For information on some of the flags, see
 # https://www.sqlite.org/compile.html
 export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
-        -DNDEBUG=1 \
-        -DSQLITE_DEFAULT_CACHE_SIZE=-16000 \
-        -DSQLITE_DEFAULT_FOREIGN_KEYS=1 \
-        -DSQLITE_DEFAULT_MEMSTATUS=0 \
-        -DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 \
-        -DSQLITE_DISABLE_DIRSYNC=1 \
-        -DSQLITE_DQS=0 \
-        -DSQLITE_ENABLE_COLUMN_METADATA \
-        -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
-        -DSQLITE_ENABLE_DESERIALIZE \
-        -DSQLITE_ENABLE_FTS3 \
-        -DSQLITE_ENABLE_FTS3_PARENTHESIS \
-        -DSQLITE_ENABLE_FTS4 \
-        -DSQLITE_ENABLE_FTS5 \
-        -DSQLITE_ENABLE_GEOPOLY \
-        -DSQLITE_ENABLE_JSON1 \
-        -DSQLITE_ENABLE_MATH_FUNCTIONS \
-        -DSQLITE_ENABLE_RTREE \
-        -DSQLITE_ENABLE_STAT4 \
-        -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
-        -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT \
-        -DSQLITE_INTROSPECTION_PRAGMAS \
-        -DSQLITE_LIKE_DOESNT_MATCH_BLOBS \
-        -DSQLITE_OMIT_DEPRECATED \
-        -DSQLITE_OMIT_GET_TABLE \
-        -DSQLITE_OMIT_PROGRESS_CALLBACK \
-        -DSQLITE_OMIT_SHARED_CACHE \
-        -DSQLITE_OMIT_TCL_VARIABLE \
-        -DSQLITE_SOUNDEX \
-        -DSQLITE_THREADSAFE=2 \
-        -DSQLITE_TRACE_SIZE_LIMIT=32 \
-        -DSQLITE_USE_ALLOCA=1 \
-        -DSQLITE_USE_URI=0 "
+	-DNDEBUG=1 \
+	-DSQLITE_DEFAULT_CACHE_SIZE=-16000 \
+	-DSQLITE_DEFAULT_FOREIGN_KEYS=1 \
+	-DSQLITE_DEFAULT_MEMSTATUS=0 \
+	-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 \
+	-DSQLITE_DISABLE_DIRSYNC=1 \
+	-DSQLITE_DQS=0 \
+	-DSQLITE_ENABLE_COLUMN_METADATA \
+	-DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+	-DSQLITE_ENABLE_DESERIALIZE \
+	-DSQLITE_ENABLE_FTS3 \
+	-DSQLITE_ENABLE_FTS3_PARENTHESIS \
+	-DSQLITE_ENABLE_FTS4 \
+	-DSQLITE_ENABLE_FTS5 \
+	-DSQLITE_ENABLE_GEOPOLY \
+	-DSQLITE_ENABLE_JSON1 \
+	-DSQLITE_ENABLE_MATH_FUNCTIONS \
+	-DSQLITE_ENABLE_RTREE \
+	-DSQLITE_ENABLE_STAT4 \
+	-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
+	-DSQLITE_ENABLE_UPDATE_DELETE_LIMIT \
+	-DSQLITE_INTROSPECTION_PRAGMAS \
+	-DSQLITE_LIKE_DOESNT_MATCH_BLOBS \
+	-DSQLITE_OMIT_DEPRECATED \
+	-DSQLITE_OMIT_GET_TABLE \
+	-DSQLITE_OMIT_SHARED_CACHE \
+	-DSQLITE_OMIT_TCL_VARIABLE \
+	-DSQLITE_SOUNDEX \
+	-DSQLITE_THREADSAFE=2 \
+	-DSQLITE_TRACE_SIZE_LIMIT=32 \
+	-DSQLITE_USE_ALLOCA=1 \
+	-DSQLITE_USE_URI=0 "
 
 %configure \
-        --disable-static \
-        --disable-static-shell \
-        --enable-fts3 \
-        --enable-fts4 \
-        --enable-fts5 \
-        --enable-json1 \
-        --enable-threadsafe \
-        --enable-threads-override-locks \
-        --enable-geopoly \
-        --enable-rtree \
-        --enable-load-extension
+	--disable-static \
+	--disable-static-shell \
+	--enable-fts3 \
+	--enable-fts4 \
+	--enable-fts5 \
+	--enable-threadsafe \
+	--enable-rtree
 
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
