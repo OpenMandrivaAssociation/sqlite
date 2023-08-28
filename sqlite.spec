@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	5
+Release:	6
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -42,7 +42,7 @@ Patch0:		sqlite-disallow-SQLITE_CONFIG_LOG-at-runtime.patch
 # require additional permissions (write access for any user
 # trying to *read* a file to the directory containing the file!)
 # and therefore cause subtle breakages.
-Patch4:		chunksize.patch
+Patch4:		https://raw.githubusercontent.com/clearlinux-pkgs/sqlite-autoconf/main/chunksize.patch
 # (tpg) do not enable ICU support as it just bloats everything
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
@@ -142,6 +142,7 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_ENABLE_GEOPOLY \
 	-DSQLITE_ENABLE_JSON1 \
 	-DSQLITE_ENABLE_MATH_FUNCTIONS \
+	-DSQLITE_ENABLE_RBU \
 	-DSQLITE_ENABLE_RTREE \
 	-DSQLITE_ENABLE_STAT4 \
 	-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
@@ -153,7 +154,11 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_OMIT_SHARED_CACHE \
 	-DSQLITE_OMIT_TCL_VARIABLE \
 	-DSQLITE_SOUNDEX \
+%ifnarch %{aarch64}
 	-DSQLITE_THREADSAFE=1 \
+%else
+	-DSQLITE_THREADSAFE=2 \
+%endif
 	-DSQLITE_TRACE_SIZE_LIMIT=32 \
 	-DSQLITE_USE_ALLOCA=1 \
 	-DSQLITE_USE_URI=0 "
