@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	6
+Release:	100
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -151,7 +151,6 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_LIKE_DOESNT_MATCH_BLOBS \
 	-DSQLITE_OMIT_DEPRECATED \
 	-DSQLITE_OMIT_GET_TABLE \
-	-DSQLITE_OMIT_SHARED_CACHE \
 	-DSQLITE_OMIT_TCL_VARIABLE \
 	-DSQLITE_SOUNDEX \
 %ifnarch %{aarch64}
