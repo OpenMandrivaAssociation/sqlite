@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	6
+Release:	7
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -36,6 +36,11 @@ Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
 # or
 # dnf install any-package-not-currently-installed
 Patch0:		sqlite-disallow-SQLITE_CONFIG_LOG-at-runtime.patch
+# Restore sqlite3_expired even when using SQLITE_OMIT_DEPRECATED
+# It's still used by tracker (damned gnomes), and it's only 1
+# line of code that actually does anything, so it doesn't increase
+# the size by much
+Patch1:		sqlite-restore-sqlite3_expired.patch
 # (tpg) ClearLinux patches
 # NOTE: NEVER add the ClearLinux patches "walmode.patch" and
 # "defaultwal.patch". While those improve performance, they
