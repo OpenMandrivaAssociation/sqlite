@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	7
+Release:	8
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -128,6 +128,7 @@ autoreconf -fi
 # SQLITE_THREADSAFE=2 is faster than SQLITE_THREADSAFE=1, but needs a bit more testing
 # to make sure we don't have anything relying on sharing a database connection between
 # threads.
+# SQLITE_OMIT_GET_TABLE breaks gdal
 # For information on some of the flags, see
 # https://www.sqlite.org/compile.html
 export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
@@ -155,7 +156,6 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_INTROSPECTION_PRAGMAS \
 	-DSQLITE_LIKE_DOESNT_MATCH_BLOBS \
 	-DSQLITE_OMIT_DEPRECATED \
-	-DSQLITE_OMIT_GET_TABLE \
 	-DSQLITE_OMIT_SHARED_CACHE \
 	-DSQLITE_OMIT_TCL_VARIABLE \
 	-DSQLITE_SOUNDEX \
