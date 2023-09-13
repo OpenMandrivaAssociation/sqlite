@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.0
-Release:	8
+Release:	9
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -128,7 +128,8 @@ autoreconf -fi
 # SQLITE_THREADSAFE=2 is faster than SQLITE_THREADSAFE=1, but needs a bit more testing
 # to make sure we don't have anything relying on sharing a database connection between
 # threads.
-# SQLITE_OMIT_GET_TABLE breaks gdal
+# SQLITE_OMIT_GET_TABLE breaks gdal (not a bug, GET_TABLE isn't a problem)
+# SQLITE_DQS=0 breaks tracker https://gitlab.gnome.org/GNOME/tracker/-/issues/410
 # For information on some of the flags, see
 # https://www.sqlite.org/compile.html
 export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
@@ -137,7 +138,6 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_DEFAULT_MEMSTATUS=0 \
 	-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1 \
 	-DSQLITE_DISABLE_DIRSYNC=1 \
-	-DSQLITE_DQS=0 \
 	-DSQLITE_ENABLE_COLUMN_METADATA \
 	-DSQLITE_ENABLE_DBSTAT_VTAB=1 \
 	-DSQLITE_ENABLE_DESERIALIZE \
