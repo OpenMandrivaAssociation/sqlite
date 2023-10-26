@@ -19,11 +19,11 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.43.2
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
-Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-autoconf-%{realver}.tar.gz
+Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-src-%{realver}.zip
 # Allowing SQLITE_CONFIG_LOG at runtime (introduced between 3.41.2
 # and 3.42.0) causes dnf to crash when trying to install anything.
 # Revert this behavior to fix dnf.
@@ -41,6 +41,7 @@ Patch0:		sqlite-disallow-SQLITE_CONFIG_LOG-at-runtime.patch
 # line of code that actually does anything, so it doesn't increase
 # the size by much
 Patch1:		sqlite-restore-sqlite3_expired.patch
+Patch2:		lemon-3.7.6.2-system-template.diff
 # (tpg) ClearLinux patches
 # NOTE: NEVER add the ClearLinux patches "walmode.patch" and
 # "defaultwal.patch". While those improve performance, they
@@ -52,6 +53,7 @@ Patch4:		https://raw.githubusercontent.com/clearlinux-pkgs/sqlite-autoconf/main/
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	tcl
 %rename	sqlite3
 
 %description
@@ -112,8 +114,31 @@ which serves as an example of how to use the SQLite library.
 This package contains command line tools for managing the
 %{libname} library.
 
+%package -n lemon
+Summary:	The Lemon Parser Generator
+Group:		Development/Tools
+
+%description -n lemon
+Lemon is an LALR(1) parser generator for C or C++. It does the same job as
+bison and yacc. But lemon is not another bison or yacc clone. It uses a
+different grammar syntax which is designed to reduce the number of coding
+errors. Lemon also uses a more sophisticated parsing engine that is faster than
+yacc and bison and which is both reentrant and thread-safe. Furthermore, Lemon
+implements features that can be used to eliminate resource leaks, making is
+suitable for use in long-running programs such as graphical user interfaces or
+embedded controllers.
+
+
 %prep
-%autosetup -n %{name}-autoconf-%{realver} -p1
+%autosetup -n %{name}-src-%{realver} -p1
+
+%configure
+make sqlite3.c
+
+# Copy in the "real" build system which handles manpages
+# etc. but requires sqlite3.c to be built before
+sed -i -e 's,--SQLITE-VERSION--,%{version},g' autoconf/configure.ac
+cp -af autoconf/* .
 autoreconf -fi
 
 %build
@@ -189,6 +214,11 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 # cleanup
 ln -s sqlite3 %{buildroot}%{_bindir}/sqlite
 
+# install lemon
+mv lemon %{buildroot}%{_bindir}/
+mkdir -p %{buildroot}%{_datadir}/lemon
+install -m 0644 tool/lempar.c %{buildroot}%{_datadir}/lemon/
+
 %files -n %{libname}
 %{_libdir}/lib%{name}%{api}.so.%{major}*
 
@@ -196,6 +226,10 @@ ln -s sqlite3 %{buildroot}%{_bindir}/sqlite
 %{_includedir}/*.h
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*.pc
+
+%files -n lemon
+%{_bindir}/lemon
+%{_datadir}/lemon
 
 %files tools
 %{_bindir}/sqlite*

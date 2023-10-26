@@ -1,6 +1,7 @@
---- sqlite-autoconf-3150000/sqlite3.c~	2016-10-14 11:48:19.000000000 +0000
-+++ sqlite-autoconf-3150000/sqlite3.c	2016-10-14 15:37:59.336527561 +0000
-@@ -34622,6 +34622,7 @@
+diff -up sqlite-src-3430200/src/os_unix.c.omv~ sqlite-src-3430200/src/os_unix.c
+--- sqlite-src-3430200/src/os_unix.c.omv~	2023-10-27 00:28:37.422472484 +0200
++++ sqlite-src-3430200/src/os_unix.c	2023-10-27 00:28:54.915628151 +0200
+@@ -5694,6 +5694,7 @@ static int fillInUnixFile(
    pNew->pVfs = pVfs;
    pNew->zPath = zFilename;
    pNew->ctrlFlags = (u8)ctrlFlags;

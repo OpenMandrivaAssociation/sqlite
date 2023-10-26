@@ -1,37 +1,26 @@
-diff -up sqlite-autoconf-3430000/sqlite3.c.omv~ sqlite-autoconf-3430000/sqlite3.c
---- sqlite-autoconf-3430000/sqlite3.c.omv~	2023-08-29 20:22:10.316940487 +0200
-+++ sqlite-autoconf-3430000/sqlite3.c	2023-08-29 20:22:37.730378501 +0200
-@@ -5909,9 +5909,9 @@ SQLITE_API int sqlite3_create_window_fun
+diff -up sqlite-src-3430200/src/sqlite.h.in.omv~ sqlite-src-3430200/src/sqlite.h.in
+--- sqlite-src-3430200/src/sqlite.h.in.omv~	2023-10-27 00:26:12.642194387 +0200
++++ sqlite-src-3430200/src/sqlite.h.in	2023-10-27 00:27:20.358789753 +0200
+@@ -5596,9 +5596,9 @@ int sqlite3_create_window_function(
  ** the use of these functions.  To encourage programmers to avoid
  ** these functions, we will not explain what they do.
  */
-+SQLITE_API SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*);
++SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*); /* still used by tracked. Damned gnomes. */
  #ifndef SQLITE_OMIT_DEPRECATED
- SQLITE_API SQLITE_DEPRECATED int sqlite3_aggregate_count(sqlite3_context*);
--SQLITE_API SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*);
- SQLITE_API SQLITE_DEPRECATED int sqlite3_transfer_bindings(sqlite3_stmt*, sqlite3_stmt*);
- SQLITE_API SQLITE_DEPRECATED int sqlite3_global_recover(void);
- SQLITE_API SQLITE_DEPRECATED void sqlite3_thread_cleanup(void);
-@@ -89208,7 +89208,7 @@ SQLITE_PRIVATE void sqlite3VdbePreUpdate
- /* #include "vdbeInt.h" */
- /* #include "opcodes.h" */
+ SQLITE_DEPRECATED int sqlite3_aggregate_count(sqlite3_context*);
+-SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*);
+ SQLITE_DEPRECATED int sqlite3_transfer_bindings(sqlite3_stmt*, sqlite3_stmt*);
+ SQLITE_DEPRECATED int sqlite3_global_recover(void);
+ SQLITE_DEPRECATED void sqlite3_thread_cleanup(void);
+diff -up sqlite-src-3430200/src/vdbeapi.c.omv~ sqlite-src-3430200/src/vdbeapi.c
+--- sqlite-src-3430200/src/vdbeapi.c.omv~	2023-10-27 00:27:36.382931286 +0200
++++ sqlite-src-3430200/src/vdbeapi.c	2023-10-27 00:27:42.257983234 +0200
+@@ -17,7 +17,7 @@
+ #include "vdbeInt.h"
+ #include "opcodes.h"
  
 -#ifndef SQLITE_OMIT_DEPRECATED
-+#if 1 || !defined(SQLITE_OMIT_DEPRECATED)
++#if 1 //ndef SQLITE_OMIT_DEPRECATED
  /*
  ** Return TRUE (non-zero) of the statement supplied as an argument needs
  ** to be recompiled.  A statement needs to be recompiled whenever the
-diff -up sqlite-autoconf-3430000/sqlite3.h.omv~ sqlite-autoconf-3430000/sqlite3.h
---- sqlite-autoconf-3430000/sqlite3.h.omv~	2023-08-29 20:20:17.500753101 +0200
-+++ sqlite-autoconf-3430000/sqlite3.h	2023-08-29 20:22:08.701914383 +0200
-@@ -5596,9 +5596,9 @@ SQLITE_API int sqlite3_create_window_fun
- ** the use of these functions.  To encourage programmers to avoid
- ** these functions, we will not explain what they do.
- */
-+SQLITE_API SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*); /* still used by tracker. Damned gnomes. */
- #ifndef SQLITE_OMIT_DEPRECATED
- SQLITE_API SQLITE_DEPRECATED int sqlite3_aggregate_count(sqlite3_context*);
--SQLITE_API SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*);
- SQLITE_API SQLITE_DEPRECATED int sqlite3_transfer_bindings(sqlite3_stmt*, sqlite3_stmt*);
- SQLITE_API SQLITE_DEPRECATED int sqlite3_global_recover(void);
- SQLITE_API SQLITE_DEPRECATED void sqlite3_thread_cleanup(void);
