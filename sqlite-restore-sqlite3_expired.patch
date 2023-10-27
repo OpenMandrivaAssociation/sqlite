@@ -5,7 +5,7 @@ diff -up sqlite-src-3430200/src/sqlite.h.in.omv~ sqlite-src-3430200/src/sqlite.h
  ** the use of these functions.  To encourage programmers to avoid
  ** these functions, we will not explain what they do.
  */
-+SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*); /* still used by tracked. Damned gnomes. */
++SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*); /* still used by tracker. Damned gnomes. */
  #ifndef SQLITE_OMIT_DEPRECATED
  SQLITE_DEPRECATED int sqlite3_aggregate_count(sqlite3_context*);
 -SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*);

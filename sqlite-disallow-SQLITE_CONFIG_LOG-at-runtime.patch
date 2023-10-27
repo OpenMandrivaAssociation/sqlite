@@ -1,0 +1,12 @@
+diff -up sqlite-src-3430200/src/main.c.omv~ sqlite-src-3430200/src/main.c
+--- sqlite-src-3430200/src/main.c.omv~	2023-10-27 03:56:36.442876264 +0200
++++ sqlite-src-3430200/src/main.c	2023-10-27 03:57:04.930877133 +0200
+@@ -424,7 +424,7 @@ int sqlite3_config(int op, ...){
+   */
+   if( sqlite3GlobalConfig.isInit ){
+     static const u64 mAnytimeConfigOption = 0
+-       | MASKBIT64( SQLITE_CONFIG_LOG )
++/*       | MASKBIT64( SQLITE_CONFIG_LOG ) */
+        | MASKBIT64( SQLITE_CONFIG_PCACHE_HDRSZ )
+     ;
+     if( op<0 || op>63 || (MASKBIT64(op) & mAnytimeConfigOption)==0 ){
