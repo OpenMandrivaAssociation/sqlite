@@ -54,6 +54,7 @@ BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	tcl
+BuildRequires:	slibtool
 %rename	sqlite3
 
 %description
@@ -206,10 +207,20 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
-%make_build
+%make_build LIBTOOL=slibtool-shared
+
+%if %{cross_compiling}
+# lemon is built for the HOST because it's used during the build
+# process -- but we want a version for the TARGET because it's
+# also used by a few other projects
+rm lemon
+sed -i -e 's,\$(BCC),$(TCC),g' Makefile
+%make_build tool/lemon LIBTOOL=slibtool-shared
+mv tool/lemon .
+%endif
 
 %install
-%make_install
+%make_install LIBTOOL=slibtool-shared
 
 # cleanup
 ln -s sqlite3 %{buildroot}%{_bindir}/sqlite
