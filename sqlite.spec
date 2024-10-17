@@ -22,7 +22,7 @@ Version:	3.46.1
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
-URL:		http://www.sqlite.org/
+URL:		https://www.sqlite.org/
 Source0:	http://www.sqlite.org/%(date +%Y)/%{name}-src-%{realver}.zip
 # Allowing SQLITE_CONFIG_LOG at runtime (introduced between 3.41.2
 # and 3.42.0) causes dnf to crash when trying to install anything.
