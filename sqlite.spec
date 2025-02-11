@@ -54,6 +54,7 @@ BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	tcl
+BuildRequires:	pkgconfig(tcl)
 BuildRequires:	slibtool
 %rename	sqlite3
 
