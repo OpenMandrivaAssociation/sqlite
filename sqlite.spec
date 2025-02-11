@@ -18,7 +18,7 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.47.2
+Version:	3.49.0
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
@@ -129,18 +129,24 @@ implements features that can be used to eliminate resource leaks, making is
 suitable for use in long-running programs such as graphical user interfaces or
 embedded controllers.
 
+%package -n tcl-%{name}
+Summary:	TCL bindings for %{name}
+Group:		System/Libraries
+
+%description -n tcl-%{name}
+TCL bindings for %{name}
 
 %prep
 %autosetup -n %{name}-src-%{realver} -p1
 
-%configure
+# Looks just like autoconf, but isn't...
+CC="%{__cc}" \
+CXX="%{__cxx}" \
+CFLAGS="%{build_cflags}" \
+CXXFLAGS="%{build_cxxflags}" \
+LDFLAGS="%{build_ldflags}" \
+./configure --prefix=%{_prefix}
 make sqlite3.c
-
-# Copy in the "real" build system which handles manpages
-# etc. but requires sqlite3.c to be built before
-sed -i -e 's,--SQLITE-VERSION--,%{version},g' autoconf/configure.ac
-cp -af autoconf/* .
-autoreconf -fi
 
 %build
 # BIG FAT WARNING !!!
@@ -194,18 +200,15 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_USE_ALLOCA=1 \
 	-DSQLITE_USE_URI=0 "
 
-%configure \
+./configure \
+	--prefix=%{_prefix} \
+	--libdir=%{_libdir} \
 	--disable-static \
-	--disable-static-shell \
 	--enable-fts3 \
 	--enable-fts4 \
 	--enable-fts5 \
 	--enable-threadsafe \
 	--enable-rtree
-
-# rpath removal
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 %make_build LIBTOOL=slibtool-shared
 
@@ -232,6 +235,7 @@ install -m 0644 tool/lempar.c %{buildroot}%{_datadir}/lemon/
 
 %files -n %{libname}
 %{_libdir}/lib%{name}%{api}.so.%{major}*
+%{_libdir}/lib%{name}%{api}.so.%{version}
 
 %files -n %{devname}
 %{_includedir}/*.h
@@ -241,6 +245,9 @@ install -m 0644 tool/lempar.c %{buildroot}%{_datadir}/lemon/
 %files -n lemon
 %{_bindir}/lemon
 %{_datadir}/lemon
+
+%files -n tcl-sqlite
+%{_datadir}/tcl*/sqlite3
 
 %files tools
 %{_bindir}/sqlite*
