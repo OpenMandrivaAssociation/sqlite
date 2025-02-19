@@ -146,7 +146,10 @@ CXX="%{__cxx}" \
 CFLAGS="%{build_cflags}" \
 CXXFLAGS="%{build_cxxflags}" \
 LDFLAGS="%{build_ldflags}" \
-./configure --prefix=%{_prefix}
+./configure --prefix=%{_prefix} \
+	--all \
+	--dynlink-tools \
+	--soname=legacy
 make sqlite3.c
 
 %build
@@ -209,7 +212,10 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	--enable-fts4 \
 	--enable-fts5 \
 	--enable-threadsafe \
-	--enable-rtree
+	--enable-rtree \
+	--all \
+	--dynlink-tools \
+	--soname=legacy
 
 %make_build LIBTOOL=slibtool-shared
 
