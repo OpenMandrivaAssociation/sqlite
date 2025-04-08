@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.49.1
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		https://www.sqlite.org/
@@ -168,7 +168,7 @@ make sqlite3.c
 # SQLITE_DQS=0 breaks tracker https://gitlab.gnome.org/GNOME/tracker/-/issues/410
 # For information on some of the flags, see
 # https://www.sqlite.org/compile.html
-export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
+export CFLAGS="%{build_cflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DNDEBUG=1 \
 	-DSQLITE_DEFAULT_CACHE_SIZE=-16000 \
 	-DSQLITE_DEFAULT_MEMSTATUS=0 \
@@ -204,9 +204,14 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	-DSQLITE_USE_ALLOCA=1 \
 	-DSQLITE_USE_URI=0 "
 
+CC="%{__cc}" \
+CXX="%{__cxx}" \
+CXXFLAGS="%{build_cxxflags}" \
+LDFLAGS="%{build_ldflags}" \
 ./configure \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
+	--host=%{_target_platform} \
 	--disable-static \
 	--enable-fts3 \
 	--enable-fts4 \
@@ -215,9 +220,14 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 	--enable-rtree \
 	--all \
 	--dynlink-tools \
+%if %{?cross_compiling}
+	--disable-tcl \
+%endif
 	--soname=legacy
 
-%make_build LIBTOOL=slibtool-shared
+# CFLAGS.readline gets set to -I/usr/include, which is harmful
+# especially when crosscompiling...
+%make_build LIBTOOL=slibtool-shared CFLAGS.readline="" LDFLAGS.rpath=""
 
 %if %{cross_compiling}
 # lemon is built for the HOST because it's used during the build
@@ -225,7 +235,7 @@ export CFLAGS="%{optflags} %{build_ldflags} -Wall -fno-strict-aliasing \
 # also used by a few other projects
 rm lemon
 sed -i -e 's,\$(BCC),$(TCC),g' Makefile
-%make_build tool/lemon LIBTOOL=slibtool-shared
+%make_build tool/lemon LIBTOOL=slibtool-shared CFLAGS.readline="" LDFLAGS.rpath=""
 mv tool/lemon .
 %endif
 
@@ -253,8 +263,10 @@ install -m 0644 tool/lempar.c %{buildroot}%{_datadir}/lemon/
 %{_bindir}/lemon
 %{_datadir}/lemon
 
+%if ! %{?cross_compiling}
 %files -n tcl-sqlite
 %{_datadir}/tcl*/sqlite3
+%endif
 
 %files tools
 %{_bindir}/sqlite*
