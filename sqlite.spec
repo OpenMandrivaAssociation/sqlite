@@ -18,7 +18,7 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
-Version:	3.50.1
+Version:	3.51.0
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
@@ -265,7 +265,7 @@ install -m 0644 tool/lempar.c %{buildroot}%{_datadir}/lemon/
 
 %if ! %{?cross_compiling}
 %files -n tcl-sqlite
-%{_datadir}/tcl*/sqlite3
+%{_datadir}/tcl*/sqlite*
 %endif
 
 %files tools
