@@ -50,6 +50,10 @@ Patch2:		lemon-3.7.6.2-system-template.diff
 # and therefore cause subtle breakages.
 Patch4:		https://raw.githubusercontent.com/clearlinux-pkgs/sqlite-autoconf/main/chunksize.patch
 # (tpg) do not enable ICU support as it just bloats everything
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	make
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(zlib)
