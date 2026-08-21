@@ -19,7 +19,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite
 Version:	3.53.4
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		https://www.sqlite.org/
@@ -250,6 +250,11 @@ mv tool/lemon .
 ln -s sqlite3 %{buildroot}%{_bindir}/sqlite
 
 # install lemon
+%if %{cross_compiling}
+# make install rebuilds lemon with BCC (host cc), overwriting the
+# target rebuild above. Compile the packaged binary for the target.
+%{__cc} %{optflags} %{build_ldflags} -o lemon tool/lemon.c
+%endif
 mv lemon %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}%{_datadir}/lemon
 install -m 0644 tool/lempar.c %{buildroot}%{_datadir}/lemon/
